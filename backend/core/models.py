@@ -18,3 +18,14 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+ 
+    
+# CRM ENTITIES
+
+
+class LeadSource(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.name

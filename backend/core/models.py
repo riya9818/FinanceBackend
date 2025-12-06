@@ -283,3 +283,16 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.amount} {self.currency})"
+    
+class ScheduledPayment(models.Model):
+    card = models.ForeignKey(
+        Card,
+        on_delete=models.CASCADE,
+        related_name='scheduled_payments'
+    )
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    due_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.title} - {self.amount}"

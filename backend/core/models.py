@@ -130,3 +130,60 @@ class SalesRegion(models.Model):
 
     def __str__(self):
         return self.name
+
+class RegionSalesStat(models.Model):
+    region = models.ForeignKey(
+        SalesRegion,
+        on_delete=models.CASCADE,
+        related_name='sales_stats'
+    )
+    month = models.PositiveSmallIntegerField()  # 1-12
+    year = models.PositiveSmallIntegerField()
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    change_percent = models.FloatField()
+
+    class Meta:
+        unique_together = ('region', 'month', 'year')
+
+    def __str__(self):
+        return f"{self.region} - {self.month}/{self.year}"
+
+
+class Task(models.Model):
+    PRIORITY_CHOICES = [
+        ('high', 'High'),
+        ('medium', 'Medium'),
+        ('low', 'Low'),
+    ]
+
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='tasks'
+    )
+    related_project = models.ForeignKey(
+        Project,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='tasks'
+    )
+    related_lead = models.ForeignKey(
+        Lead,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='tasks'
+    )
+
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    due_date = models.DateField(null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

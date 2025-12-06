@@ -187,3 +187,43 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+# DOCUMENT MANAGEMENT
+# -----------------------
+
+class SectionCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Section(models.Model):
+    STATUS_CHOICES = [
+        ('not_started', 'Not Started'),
+        ('in_process', 'In Process'),
+        ('done', 'Done'),
+    ]
+
+    category = models.ForeignKey(
+        SectionCategory,
+        on_delete=models.CASCADE,
+        related_name='sections'
+    )
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='review_sections'
+    )
+
+    title = models.CharField(max_length=255)
+    section_type = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_started')
+    target = models.IntegerField(default=0)
+    limit = models.IntegerField(default=0)
+    order_index = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.title

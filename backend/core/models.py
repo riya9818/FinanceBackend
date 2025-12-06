@@ -227,3 +227,59 @@ class Section(models.Model):
 
     def __str__(self):
         return self.title
+    
+# FINANCE ENTITIES
+# -----------------------
+
+class Card(models.Model):
+    CARD_TYPE_CHOICES = [
+        ('virtual', 'Virtual'),
+        ('physical', 'Physical'),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='cards'
+    )
+    card_type = models.CharField(max_length=10, choices=CARD_TYPE_CHOICES, default='virtual')
+    last4 = models.CharField(max_length=4)
+    expiry_month = models.PositiveSmallIntegerField()
+    expiry_year = models.PositiveSmallIntegerField()
+    spending_limit = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    available_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    is_frozen = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.get_card_type_display()} •••• {self.last4}"
+
+
+class ExpenseCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Transaction(models.Model):
+    card = models.ForeignKey(
+        Card,
+        on_delete=models.CASCADE,
+        related_name='transactions'
+    )
+    category = models.ForeignKey(
+        ExpenseCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='transactions'
+    )
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)  # + = income, - = expense
+    currency = models.CharField(max_length=10, default='USD')
+    transaction_date = models.DateTimeField()
+    is_recurring = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.title} ({self.amount} {self.currency})"

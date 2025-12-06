@@ -296,3 +296,17 @@ class ScheduledPayment(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.amount}"
+
+class ExchangeRate(models.Model):
+    from_currency = models.CharField(max_length=10)
+    to_currency = models.CharField(max_length=10)
+    rate = models.DecimalField(max_digits=12, decimal_places=6)
+    tax_percent = models.FloatField(default=0)
+    fee_percent = models.FloatField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('from_currency', 'to_currency')
+
+    def __str__(self):
+        return f"{self.from_currency} → {self.to_currency}"

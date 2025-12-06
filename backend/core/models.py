@@ -310,3 +310,16 @@ class ExchangeRate(models.Model):
 
     def __str__(self):
         return f"{self.from_currency} → {self.to_currency}"
+
+# ANALYTICS
+# -----------------------
+
+class VisitorStat(models.Model):
+    date = models.DateField()
+    visitor_count = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('date',)
+
+    def __str__(self):
+        return f"{self.date}: {self.visitor_count} visitors"

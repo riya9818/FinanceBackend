@@ -61,3 +61,53 @@ class LeadSerializer(serializers.ModelSerializer):
             "customer", "customer_id",
             "source", "source_id",
         ]
+class ProposalSerializer(serializers.ModelSerializer):
+    lead = LeadSerializer(read_only=True)
+    lead_id = serializers.PrimaryKeyRelatedField(
+        queryset=Lead.objects.all(),
+        source="lead",
+        write_only=True,
+    )
+    customer = CustomerSerializer(read_only=True)
+    customer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Customer.objects.all(),
+        source="customer",
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+
+    class Meta:
+        model = Proposal
+        fields = [
+            "id", "sent_date", "status", "amount", "notes",
+            "lead", "lead_id",
+            "customer", "customer_id",
+        ]
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer(read_only=True)
+    customer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Customer.objects.all(),
+        source="customer",
+        write_only=True,
+    )
+    proposal_id = serializers.PrimaryKeyRelatedField(
+        queryset=Proposal.objects.all(),
+        source="proposal",
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+    proposal = ProposalSerializer(read_only=True)
+
+    class Meta:
+        model = Project
+        fields = [
+            "id", "name", "status",
+            "target_revenue", "actual_revenue",
+            "start_date", "end_date",
+            "customer", "customer_id",
+            "proposal", "proposal_id",
+        ]

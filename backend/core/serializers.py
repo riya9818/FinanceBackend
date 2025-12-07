@@ -37,5 +37,27 @@ class LeadSourceSerializer(serializers.ModelSerializer):
         fields =["id","name","description"]
 
 class LeadSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer(read_only=True)
+    customer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Customer.objects.all(),
+        source="customer",
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+    source = LeadSourceSerializer(read_only=True)
+    source_id = serializers.PrimaryKeyRelatedField(
+        queryset=LeadSource.objects.all(),
+        source="source",
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+
     class Meta:
-        model= Lead
+        model = Lead
+        fields= [
+            "id", "title", "status", "created_at", "expected_value", "notes",
+            "customer", "customer_id",
+            "source", "source_id",
+        ]

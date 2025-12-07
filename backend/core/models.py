@@ -322,4 +322,4 @@ class VisitorStat(models.Model):
         unique_together = ('date',)
 
     def __str__(self):
-        return f"{self.date}: {self.visitor_count} visitors"
+        return f"{self.date}: {self.visitor_count} visitors"    

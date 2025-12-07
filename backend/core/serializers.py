@@ -1,7 +1,8 @@
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from core.models import (Customer,Lead,LeadSource)
+from core.models import (Customer,Lead,LeadSource, Proposal,Project,SalesRegion
+                         ,RegionSalesStat)
 
 User = get_user_model()
 
@@ -111,3 +112,22 @@ class ProjectSerializer(serializers.ModelSerializer):
             "customer", "customer_id",
             "proposal", "proposal_id",
         ]
+
+class SalesRegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalesRegion
+        fields = ["id", "name"]
+
+
+class RegionSalesStatSerializer(serializers.ModelSerializer):
+    region = SalesRegionSerializer(read_only=True)
+    region_id = serializers.PrimaryKeyRelatedField(
+        queryset=SalesRegion.objects.all(),
+        source="region",
+        write_only=True,
+    )
+
+    class Meta:
+        model = RegionSalesStat
+        fields = ["id", "region", "region_id", "month", "year", "amount", "change_percent"]
+

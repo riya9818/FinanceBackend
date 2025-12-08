@@ -230,3 +230,17 @@ class SectionSerializer(serializers.ModelSerializer):
             "reviewer", "reviewer_id",
         ]
 
+# ---------- FINANCE ----------
+
+class CardSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Card
+        fields = [
+            "id", "card_type", "last4",
+            "expiry_month", "expiry_year",
+            "spending_limit", "available_balance",
+            "is_frozen", "user",
+        ]
+        read_only_fields = ["user"]

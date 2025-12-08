@@ -266,3 +266,4 @@ class TransactionSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
+class Meta

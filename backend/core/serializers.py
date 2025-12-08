@@ -244,3 +244,8 @@ class CardSerializer(serializers.ModelSerializer):
             "is_frozen", "user",
         ]
         read_only_fields = ["user"]
+
+class ExpenseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpenseCategory
+        fields = ["id", "name"]

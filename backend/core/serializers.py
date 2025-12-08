@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from core.models import (Customer,Lead,LeadSource, Proposal,Project,SalesRegion
-                         ,RegionSalesStat, Task)
+                         ,RegionSalesStat, Task, Section, SectionCategory)
 
 User = get_user_model()
 
@@ -198,3 +198,35 @@ class SectionSerializer(serializers.ModelSerializer):
         ]
 
 #-----Document
+
+class SectionCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SectionCategory
+        fields = ["id", "name"]
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    category = SectionCategorySerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=SectionCategory.objects.all(),
+        source="category",
+        write_only=True,
+    )
+    reviewer = UserSerializer(read_only=True)
+    reviewer_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        source="reviewer",
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+
+    class Meta:
+        model = Section
+        fields = [
+            "id", "title", "section_type", "status",
+            "target", "limit", "order_index",
+            "category", "category_id",
+            "reviewer", "reviewer_id",
+        ]
+

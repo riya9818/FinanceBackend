@@ -249,3 +249,20 @@ class ExpenseCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpenseCategory
         fields = ["id", "name"]
+    
+class TransactionSerializer(serializers.ModelSerializer):
+    card = CardSerializer(read_only=True)
+    card_id = serializers.PrimaryKeyRelatedField(
+        queryset=Card.objects.all(),
+        source="card",
+        write_only=True,
+    )
+    category = ExpenseCategorySerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=ExpenseCategory.objects.all(),
+        source="category",
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+

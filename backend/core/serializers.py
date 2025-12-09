@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from core.models import (Card, Customer, ExchangeRate, ExpenseCategory,Lead,LeadSource, Proposal,Project,SalesRegion
-                         ,RegionSalesStat, ScheduledPayment, Task, Section, SectionCategory, Transaction)
+                         ,RegionSalesStat, ScheduledPayment, Task, Section, SectionCategory, Transaction, VisitorStat)
 
 User = get_user_model()
 
@@ -295,3 +295,10 @@ class ExchangeRateSerializer(serializers.ModelSerializer):
             "id", "from_currency", "to_currency",
             "rate", "tax_percent", "fee_percent", "updated_at",
         ]
+
+# ---------- ANALYTICS ----------
+
+class VisitorStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VisitorStat
+        fields = ["id", "date", "visitor_count"]

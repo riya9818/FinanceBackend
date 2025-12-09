@@ -67,3 +67,21 @@ class RegionSalesStatViewSet(viewsets.ModelViewSet):
     queryset = RegionSalesStat.objects.all()
     serializer_class = RegionSalesStatSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all().order_by('-created_at')
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class SectionCategoryViewSet(viewsets.ModelViewSet):
+    queryset = SectionCategory.objects.all()
+    serializer_class = SectionCategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class SectionViewSet(viewsets.ModelViewSet):
+    queryset = Section.objects.all().order_by('order_index')
+    serializer_class = SectionSerializer
+    permission_classes = [permissions.IsAuthenticated]

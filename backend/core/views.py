@@ -117,3 +117,14 @@ class ScheduledPaymentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return ScheduledPayment.objects.filter(card__user=self.request.user).order_by('due_date')
+
+class ExchangeRateViewSet(viewsets.ModelViewSet):
+    queryset = ExchangeRate.objects.all()
+    serializer_class = ExchangeRateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class VisitorStatViewSet(viewsets.ModelViewSet):
+    queryset = VisitorStat.objects.all().order_by('date')
+    serializer_class = VisitorStatSerializer
+    permission_classes = [permissions.IsAuthenticated]

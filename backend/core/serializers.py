@@ -265,5 +265,33 @@ class TransactionSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
+    class Meta:
+        model = Transaction
+        fields = [
+            "id", "title", "description", "amount",
+            "currency", "transaction_date", "is_recurring",
+            "card", "card_id",
+            "category", "category_id",
+        ]
 
-class Meta
+
+class ScheduledPaymentSerializer(serializers.ModelSerializer):
+    card = CardSerializer(read_only=True)
+    card_id = serializers.PrimaryKeyRelatedField(
+        queryset=Card.objects.all(),
+        source="card",
+        write_only=True,
+    )
+
+    class Meta:
+        model = ScheduledPayment
+        fields = ["id", "title", "amount", "due_date", "card", "card_id"]
+
+
+class ExchangeRateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExchangeRate
+        fields = [
+            "id", "from_currency", "to_currency",
+            "rate", "tax_percent", "fee_percent", "updated_at",
+        ]

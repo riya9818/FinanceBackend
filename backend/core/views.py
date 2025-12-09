@@ -96,3 +96,24 @@ class CardViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class ExpenseCategoryViewSet(viewsets.ModelViewSet):
+    queryset = ExpenseCategory.objects.all()
+    serializer_class = ExpenseCategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # all transactions for current user's cards
+        return Transaction.objects.filter(card__user=self.request.user).order_by('-transaction_date')
+
+class ScheduledPaymentViewSet(viewsets.ModelViewSet):
+    serializer_class = ScheduledPaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return ScheduledPayment.objects.filter(card__user=self.request.user).order_by('due_date')

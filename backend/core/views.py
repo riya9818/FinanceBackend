@@ -85,3 +85,14 @@ class SectionViewSet(viewsets.ModelViewSet):
     queryset = Section.objects.all().order_by('order_index')
     serializer_class = SectionSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class CardViewSet(viewsets.ModelViewSet):
+    serializer_class = CardSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # only current user's cards
+        return Card.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

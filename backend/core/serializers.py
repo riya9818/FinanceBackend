@@ -1,8 +1,8 @@
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from core.models import (Customer,Lead,LeadSource, Proposal,Project,SalesRegion
-                         ,RegionSalesStat, Task, Section, SectionCategory)
+from core.models import (Card, Customer, ExchangeRate, ExpenseCategory,Lead,LeadSource, Proposal,Project,SalesRegion
+                         ,RegionSalesStat, ScheduledPayment, Task, Section, SectionCategory, Transaction)
 
 User = get_user_model()
 

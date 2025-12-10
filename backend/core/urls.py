@@ -30,3 +30,10 @@ router.register(r'transactions', TransactionViewSet)
 router.register(r'scheduled-payments', ScheduledPaymentViewSet)
 router.register(r'exchange-rates', ExchangeRateViewSet)
 router.register(r'visitor-stats', VisitorStatViewSet)
+
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('dashboard/summary/', dashboard_summary, name='dashboard-summary'),
+   
+]

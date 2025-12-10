@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.shortcuts import render
 
 # Create your views here.
@@ -128,3 +129,27 @@ class VisitorStatViewSet(viewsets.ModelViewSet):
     queryset = VisitorStat.objects.all().order_by('date')
     serializer_class = VisitorStatSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def dashboard_summary(request):
+    """
+    Returns the numbers for the main dashboard cards:
+    - total_revenue
+    - new_customers (last 30 days)
+    - active_accounts (active customers)
+    - growth_rate 
+    """
+    user = request.user
+    today = now().date()
+    last_30_days = today - timedelta(days=30)
+
+    transactions = Transaction.objects.filter(card__user=user)
+    total_revenue = transactions.filter(amount__gt=0).aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+#customer card logic to filter in dashboard page
+    new_customers = Customer.objects.filter(joined_date__gte=last_30_days).count()
+    active_accounts = Customer.objects.filter(is_active=True).count()

@@ -153,3 +153,12 @@ def dashboard_summary(request):
 #customer card logic to filter in dashboard page
     new_customers = Customer.objects.filter(joined_date__gte=last_30_days).count()
     active_accounts = Customer.objects.filter(is_active=True).count()
+
+    growth_rate = 0
+
+    return Response({
+        "total_revenue": total_revenue,
+        "new_customers": new_customers,
+        "active_accounts": active_accounts,
+        "growth_rate": growth_rate,
+    })

@@ -88,6 +88,7 @@ class SectionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 class CardViewSet(viewsets.ModelViewSet):
+    queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -105,6 +106,7 @@ class ExpenseCategoryViewSet(viewsets.ModelViewSet):
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
+    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -113,6 +115,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.filter(card__user=self.request.user).order_by('-transaction_date')
 
 class ScheduledPaymentViewSet(viewsets.ModelViewSet):
+    queryset = ScheduledPayment.objects.all()
     serializer_class = ScheduledPaymentSerializer
     permission_classes = [permissions.IsAuthenticated]
 

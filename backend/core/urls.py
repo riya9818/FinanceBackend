@@ -13,6 +13,7 @@ from .views import (
     dashboard_summary,
 )
 
+#router since auto generate 7 endpoints/urls of CRUD 
 router = DefaultRouter()
 router.register(r'customers', CustomerViewSet)
 router.register(r'lead-sources', LeadSourceViewSet)

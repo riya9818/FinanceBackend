@@ -165,3 +165,46 @@ def dashboard_summary(request):
         "active_accounts": active_accounts,
         "growth_rate": growth_rate,
     })
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def finance_overview(request):
+    """
+    Returns data for the finance overview box and charts.
+    """
+    user = request.user
+    year = request.query_params.get("year")
+    if year is None:
+        year = now().year
+    else:
+        year = int(year)
+
+    qs = Transaction.objects.filter(
+        card__user=user,
+        transaction_date__year=year
+    )
+
+    income = qs.filter(amount__gt=0).aggregate(total=Sum("amount"))["total"] or 0
+    expenses_raw = qs.filter(amount__lt=0).aggregate(total=Sum("amount"))["total"] or 0
+    expenses = abs(expenses_raw)
+
+    scheduled = ScheduledPayment.objects.filter(
+        card__user=user,
+        due_date__year=year
+    ).aggregate(total=Sum("amount"))["total"] or 0
+
+    # recent 5 transactions
+    recent_transactions = qs.order_by('-transaction_date')[:5]
+    recent_data = TransactionSerializer(recent_transactions, many=True).data
+
+    # cards
+    cards = Card.objects.filter(user=user)
+    cards_data = CardSerializer(cards, many=True).data
+
+    return Response({
+        "income": income,
+        "expenses": expenses,
+        "scheduled": scheduled,
+        "recent_transactions": recent_data,
+        "cards": cards_data,
+    })

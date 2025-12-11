@@ -10,7 +10,7 @@ from .views import (
     CardViewSet, ExpenseCategoryViewSet,
     TransactionViewSet, ScheduledPaymentViewSet,
     ExchangeRateViewSet, VisitorStatViewSet,
-    dashboard_summary,
+    dashboard_summary, finance_overview,
 )
 
 #router since auto generate 7 endpoints/urls of CRUD 
@@ -36,5 +36,5 @@ router.register(r'visitor-stats', VisitorStatViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('dashboard/summary/', dashboard_summary, name='dashboard-summary'),
-   
+    path('finance/overview/', finance_overview, name='finance-overview')
 ]
